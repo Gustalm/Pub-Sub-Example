@@ -14,6 +14,6 @@ namespace PubSubExample.Domain
                 subscription = eve.Subscribe<T>(action);
         }
 
-        public void Unsubscribe() => eventAggregator.UnSbscribe(subscription);
+        public void Unsubscribe() => eventAggregator.Unsubscribe(subscription);
     }
 }

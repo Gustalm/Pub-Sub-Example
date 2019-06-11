@@ -15,7 +15,7 @@ namespace PubSubExample.Domain
 
         public void Dispose()
         {
-            EventAggregator.UnSbscribe(this);
+            EventAggregator.Unsubscribe(this);
             isDisposed = true;
         }
     }

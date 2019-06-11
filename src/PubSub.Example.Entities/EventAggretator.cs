@@ -7,20 +7,20 @@ namespace PubSubExample.Domain
 {
     public class EventAggregator
     {
-        private Dictionary<Type, IList> subscribers;
+        public Dictionary<Type, IList> Subscribers { get; private set; }
 
         public EventAggregator()
         {
-            subscribers = new Dictionary<Type, IList>();
+            Subscribers = new Dictionary<Type, IList>();
         }
 
         public void Publish<TMessageType>(TMessageType message)
         {
             Type t = typeof(TMessageType);
             IList actionlst;
-            if (subscribers.ContainsKey(t))
+            if (Subscribers.ContainsKey(t))
             {
-                actionlst = new List<Subscription<TMessageType>>(subscribers[t].Cast<Subscription<TMessageType>>());
+                actionlst = new List<Subscription<TMessageType>>(Subscribers[t].Cast<Subscription<TMessageType>>());
 
                 foreach (Subscription<TMessageType> a in actionlst)
                 {
@@ -32,14 +32,13 @@ namespace PubSubExample.Domain
         public Subscription<TMessageType> Subscribe<TMessageType>(Action<TMessageType> action)
         {
             Type t = typeof(TMessageType);
-            IList actionlst;
             var actiondetail = new Subscription<TMessageType>(action, this);
 
-            if (!subscribers.TryGetValue(t, out actionlst))
+            if (!Subscribers.TryGetValue(t,out var actionlst))
             {
                 actionlst = new List<Subscription<TMessageType>>();
                 actionlst.Add(actiondetail);
-                subscribers.Add(t, actionlst);
+                Subscribers.Add(t, actionlst);
             }
             else
             {
@@ -49,12 +48,12 @@ namespace PubSubExample.Domain
             return actiondetail;
         }
 
-        public void UnSbscribe<TMessageType>(Subscription<TMessageType> subscription)
+        public void Unsubscribe<TMessageType>(Subscription<TMessageType> subscription)
         {
             Type t = typeof(TMessageType);
-            if (subscribers.ContainsKey(t))
+            if (Subscribers.ContainsKey(t))
             {
-                subscribers[t].Remove(subscription);
+                Subscribers[t].Remove(subscription);
             }
         }
 
