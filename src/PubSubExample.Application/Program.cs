@@ -5,7 +5,6 @@ namespace PubSubExample.Application
 {
     class Program
     { 
-
         static void Main(string[] args)
         {
             var eve = new EventAggregator();
